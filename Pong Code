@@ -1,0 +1,119 @@
+import turtle, pygame, sys
+from pygame.locals import *
+
+#Creating background
+root = turtle.Screen()
+root.title("Let's Play Pong!")
+root.bgcolor("black")
+root.setup(width = 1000, height = 600)
+
+#Creating left paddle
+lstick = turtle.Turtle()
+lstick.speed(0)
+lstick.shape("square")
+lstick.color("white")
+lstick.shapesize(stretch_wid = 3, stretch_len = 1)
+lstick.penup()
+lstick.goto(-400, 0)
+
+#Creating right paddle
+rstick = turtle.Turtle()
+rstick.speed(0)
+rstick.shape("square")
+rstick.color("white")
+rstick.shapesize(stretch_wid = 3, stretch_len = 1)
+rstick.penup()
+rstick.goto(400, 0)
+
+#creating the ball
+ball = turtle.Turtle()
+ball.speed(40)
+ball.shape("circle")
+ball.color("white")
+ball.penup()
+ball.goto(0, 0)
+ballxdirection = 5
+ballydirection = -5
+
+#Initializing the score
+player1 = 0
+player2 = 0
+
+#Displaying the score
+score = turtle.Turtle()
+score.speed(0)
+score.color("white")
+score.penup()
+score.hideturtle()
+score.goto(0, 260)
+score.write("Player_1 : 0 Player_2 : 0", align = "center", font = ("Calibri", 24, "normal"))
+
+#Allowing the player to move the paddle vertically
+def lstickup():
+    y = lstick.ycor()
+    y += 20
+    lstick.sety(y)
+    
+def lstickdown():
+    y = lstick.ycor()
+    y -= 20
+    lstick.sety(y)
+    
+def rstickup():
+    y = rstick.ycor()
+    y += 20
+    rstick.sety(y)
+    
+def rstickdown():
+    y = rstick.ycor()
+    y -= 20
+    rstick.sety(y)
+    
+#Keyboard Settings
+root.listen()
+root.onkeypress(lstickup, "w")
+root.onkeypress(lstickdown, "s")
+root.onkeypress(rstickup, "Up")
+root.onkeypress(rstickdown, "Down")
+
+while True:
+    root.update()
+    
+    ball.setx(ball.xcor() + ballxdirection)
+    ball.sety(ball.ycor() + ballydirection)
+    
+    #Creating boarders
+    if ball.ycor() > 280:
+        ball.sety(280)
+        ballydirection *= -1
+        
+    if ball.ycor() < -280:
+       ball.sety(-280)
+       ballydirection *= -1
+       
+    if ball.xcor() > 500:
+        ball.goto(0, 0)
+        ballydirection *= -1
+        player1 += 1
+        score.clear()
+        score.write("Player 1 : {}      Player 2 : {}". format(player1, player2), align = "center", font = ("Calibri", 24, "normal"))
+        
+    if ball.xcor() < -500:
+        ball.goto(0, 0)
+        ballydirection *= -1
+        player1 += 1
+        score.clear()
+        score.write("Player 1 : {}      Player 2 : {}". format(player1, player2), align = "center", font = ("Calibri", 24, "normal"))
+        
+    if lstick.ycor() > 280:
+        lstick.sety(280)
+        lstick.ycor
+        
+    #Paddle and Ball Collision
+    if (ball.xcor() < -360 and ball.xcor() > -370) and (ball.ycor() < lstick.ycor() + 40 and ball.ycor() > lstick.ycor() -40): 
+        ball.setx(-360) 
+        ballxdirection *= -1
+        
+    if (ball.xcor() > 360 and ball.xcor() < 370) and (ball.ycor() < rstick.ycor() + 40 and ball.ycor() > rstick.ycor() -40): 
+            ball.setx(360) 
+            ballxdirection *= -1
